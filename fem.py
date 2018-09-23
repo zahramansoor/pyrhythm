@@ -1,23 +1,32 @@
-##FEM computation of a square element of cardiac muscle tissue
-##Zahra Dhanerawala, Viktor Grigoryan
-##June 14, 2018
-##=========================================================================================================
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep 17 10:36:52 2018
 
+@author: zahramansoor
+
+"""
 ##This version treats only the element nodes in the FHN element as FHN nodes
 import numpy as np
 import matplotlib.pyplot as plt
-from initialisation import * ##imports all initial values!
-from constants import * 
 from element_calcs import element_calcs ##imports element_calcs functions
 import functions as f
 
+##define matrix size
+matrix_size = 21*21*4
+global_matrix_size = 22*22
+time_step = 100
+
+#initialise
+params = f.initialise_params(time_step, matrix_size, global_matrix_size)
+
 ##time loop
-for n in time:
+for n in params['time']:
     R_phi_global = np.ones((global_matrix_size,1))
     ##this acts as a dummy variable to start the while loop
     ##the variable is updated at the end of the while loop to the values of R_phi_global
     Tol = np.ones((global_matrix_size,1))*tol
-    phi_global=phi_global_time[:,(n-1)] ##using the 'passed' phi_global frm previous time
+    phi_global = phi_global_time[:,(n-1)] ##using the 'passed' phi_global frm previous time
 
     while sum(abs(R_phi_global)) > sum(Tol):
         print('The residuals have not passed tolerance. Recalculating...')
