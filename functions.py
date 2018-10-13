@@ -7,92 +7,6 @@ Created on Sun Sep 23 16:08:04 2018
 """
 
 import numpy as np
-import scipy.io as sio
-
-def initialise_params(time_step, matrix_size, global_matrix_size):
-    '''Function to initialise cardiac action potential model based on finite element method outlined in Goktepe et al.
-    
-    Inputs:
-        time_step = time to iterate through
-        matrix_size = matrix to imitate heart tissue. 
-        global_matrix_size = global nodes of matrix. largest functionality is currently 64x64.
-        
-    '''
-    
-    params = {}
-    ##initial guess for phi
-    ##each element in the phi vector corresponds to a node in the system
-    phi = np.zeros((time_step,matrix_size))
-    
-    ##initial guess for r
-    ##each element in the r vector corresponds to a node in the system
-    params['r'] = np.zeros((time_step,matrix_size))
-        
-    ##per element level calculation!
-    ##intiliase
-    params['R_phi'] = np.ones((matrix_size,1))
-    params['p_phi_R_phi'] = np.zeros((matrix_size,matrix_size))
-    params['p_phi_R_phi_global'] = np.zeros((global_matrix_size,global_matrix_size))
-    params['p_r_R_r'] = np.zeros((time_step,matrix_size))
-    params['phi_global_time'] = np.zeros((global_matrix_size,time_step))
-    ##defined this way so it makes organising the matrices easier
-    params['phi_step'] = np.zeros(time_step)
-    params['dphi_r'] = np.zeros((1,global_matrix_size))
-    ##this vector consists of 10 times steps
-    t = np.arange(0,0.01,0.001) ##the third value is the desired delta t
-    diff_t = t[2]-t[1] ##delta t
-    time = t/(diff_t+1) ##where n = 1, 2, ..., 100
-    params['diff_t'] = diff_t
-    params['time'] = time.astype(int) ##converts time to integer values
-    
-    ##put initial guess for phi (FHN is non zero)
-    phi_global = np.zeros(global_matrix_size)
-    phi_global[230] = 5.385e-1
-    phi_global[231] = 5.385e-1
-    phi_global[252] = 5.385e-1
-    phi_global[253] = 5.385e-1
-    params['phi_global'] = phi_global
-    
-    ##setting t=0
-    import functions as f
-    phi[0,:]=f.global_to_element_21x21(phi[0,:],phi_global)
-    print('These are the FHN non-zero nodes' + '\n' +
-          str(np.nonzero(phi[0,:]>0))) ##find out non-zero indices of phi
-    params['phi'] = phi
-    
-    ##defining constants
-    params['alpha_AVP'] = 0.01
-    params['c_AVP'] = 8
-    params['alpha_d_phi_f_phi_FHN'] = 0.5
-    params['c_d_phi_f_phi_FHN'] = 50
-    params['b_d_phi_f_phi_FHN'] = -0.6
-    params['alpha_fun_phi_AVP'] = 0.01
-    params['alpha_fun_phi_FHN'] = 0.5
-    params['gamma_AVP'] = 0.002
-    params['b_AVP'] = 0.15
-    params['mu1'] = 0.2
-    params['mu2'] = 0.3
-    params['a_r_FHN'] = 0
-    params['b_r_FHN'] = -0.6
-    params['tol'] = 1e-6 ##convergence tolerance
-    params['R_r_step'] = np.zeros((matrix_size, 1));
-    
-    ##shape functions
-    ##importing matlab .mat files for integral values of shape functions
-    nint_contents = sio.loadmat('nint.mat')
-    params['nint'] = nint_contents['nint']
-    nsqint_contents = sio.loadmat('nsqint.mat') ##2D
-    params['nsqint'] = nsqint_contents['nsqint']
-    ncubint_contents = sio.loadmat('ncubint.mat') ##3D
-    params['ncubint'] = ncubint_contents['ncubint']
-    nquadint_contents = sio.loadmat('nquadint.mat') ##4D
-    params['nquadint'] = nquadint_contents['nquadint']
-    ngradint_contents = sio.loadmat('ngradint.mat') ##2D
-    params['ngradint'] = ngradint_contents['ngradint']
-    nfluxint_contents = sio.loadmat('nfluxint.mat') ##3D
-    params['nfluxint'] = nfluxint_contents['nfluxint']
-
-    return params
 
 ##global_to_element_21x21
 ##converts the elemental nodes to global nodes for the Newton's method
@@ -127,7 +41,7 @@ def global_to_element_21x21(element_matrix,global_matrix):
 ##calculation of the residual function for the recovery variable r
 ##takes into account r and phi in each element
 def residual_r(phi,r,n, **params):
-    """calculation of the residual function for the recovery variable r"""
+    """Calculation of the residual function for the recovery variable r"""
     
     #set constants
     gamma_AVP = params['gamma_AVP']
@@ -143,7 +57,7 @@ def residual_r(phi,r,n, **params):
 ##calculation of the partial derivative w/r/t r of the residual function for r
 ##takes into account r and phi in each element
 def partial_derivative_r_residual_r(phi, r, **params):
-    """calculation of the partial derivative w/r/t r of the residual function for r"""
+    """Calculation of the partial derivative w/r/t r of the residual function for r"""
     
     #set constants
     gamma_AVP = params['gamma_AVP']
@@ -157,17 +71,15 @@ def partial_derivative_r_residual_r(phi, r, **params):
 
 ##calculates value of d_phi_r which is needed to calculate d_phi_f_phi
 ##for the Newton iteration
-
 def d_phi_r(P_r_R_r,P_phi_R_r):
-    """calculates value of d_phi_r which is needed to calculate d_phi_f_phi"""
+    """Calculates value of d_phi_r which is needed to calculate d_phi_f_phi"""
     d_phi_r = P_phi_R_r/P_r_R_r
     return d_phi_r
 
 
 ##value of r in FHN element
-
 def r_FHN(r_n, phi, **params):
-    """value of r in FHN element"""
+    """Value of r in FHN element"""
     #set constants
     a = 0; b = -0.6; diff_t = params['diff_t']
     
@@ -177,9 +89,8 @@ def r_FHN(r_n, phi, **params):
 
 ##calculation of the partial derivative w/r/t phi of the residual function for r
 ##takes into account r and phi in each element
-
 def partial_derivative_phi_residual_r(phi, r, **params):
-    """calculation of the partial derivative w/r/t phi of the residual function for r"""
+    """Calculation of the partial derivative w/r/t phi of the residual function for r"""
     
     #set constants
     gamma_AVP = params['gamma_AVP']; c_AVP = params['c_AVP']; b_AVP = params['b_AVP']
@@ -195,9 +106,8 @@ def partial_derivative_phi_residual_r(phi, r, **params):
 ##calculation of the partial derivative w/r/t phi of residual function
 ##takes into account individual shape functions of each element
 ##& the value of phi at each element node
-
 def partial_derivative_phi_R_phi_AVP(i, j, phi, r, nodes, dphi_r, n, **params):
-    """calculation of the partial derivative w/r/t phi of residual function"""
+    """Calculation of the partial derivative w/r/t phi of residual function"""
     
     #initial values
     term3_a = np.zeros((4,4))
@@ -235,9 +145,8 @@ def partial_derivative_phi_R_phi_AVP(i, j, phi, r, nodes, dphi_r, n, **params):
 ##calculation of the partial derivative w/r/t phi of residual function
 ##takes into account individual shape functions of each element
 ##& the value of phi at each element node
-
 def partial_derivative_phi_R_phi_FHN(i,j,phi,r,nodes,n, **params):
-    """calculation of the partial derivative w/r/t phi of residual function for FHN NODES"""
+    """Calculation of the partial derivative w/r/t phi of residual function for FHN NODES"""
     
     #initial values
     term3_a = np.zeros((4,4))
@@ -277,9 +186,8 @@ def partial_derivative_phi_R_phi_FHN(i,j,phi,r,nodes,n, **params):
 ##as well as the phi componenets of each element
 ##i and j has to be between 0 and 3 ONLY
 ##howevever, the matrix index for phi (element node matrix) MUST be j+k, m+k, etc.
-
 def residual_phi(i,phi,r,nodes,n, **params):
-    """calculation of the residual function"""
+    """Calculation of the residual function"""
     
     ##initial values
     term1=0
@@ -374,7 +282,6 @@ def residual_phi(i,phi,r,nodes,n, **params):
                 
         
 ##calculation of the residual function for FHN NODES
-
 def residual_phi_FHN(i,phi,r,nodes,n,**params):
     '''Calculation of the residual function for FHN NODES.
     Takes into account individual shape functions of each element as well as the phi componenets of each element.
@@ -440,9 +347,8 @@ def residual_phi_FHN(i,phi,r,nodes,n,**params):
 
 ##computes the global matrix of the partial derivatives of the residuals
 ##and the residuals for the elements
-
 def element_to_global_21x21(R_phi, p_phi_R_phi):
-    """computes the global matrix of the partial derivatives of the residuals and the residuals"""
+    """Computes the global matrix of the partial derivatives of the residuals and the residuals"""
     
     ##initialise
     R_phi_global=np.zeros(484)
