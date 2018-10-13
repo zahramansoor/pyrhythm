@@ -40,12 +40,11 @@ def global_to_element_21x21(element_matrix,global_matrix):
 
 ##calculation of the residual function for the recovery variable r
 ##takes into account r and phi in each element
-def residual_r(phi,r,n, **params):
+def residual_r(phi, r, n, **params):
     """Calculation of the residual function for the recovery variable r"""
     
     #set constants
-    gamma_AVP = params['gamma_AVP']
-    mu1 = params['mu1']; mu2 = params['mu2']; diff_t = params['diff_t']
+    gamma_AVP = params['gamma_AVP']; mu1 = params['mu1']; mu2 = params['mu2']; diff_t = params['delta_t']
     c_AVP = params['c_AVP']; b_AVP = params['b_AVP']     
     
     R_r = r[n] - r[n-1] - (((gamma_AVP + ((mu1*r[n])/(mu2 + phi))) *
@@ -61,7 +60,7 @@ def partial_derivative_r_residual_r(phi, r, **params):
     
     #set constants
     gamma_AVP = params['gamma_AVP']
-    mu1 = params['mu1']; mu2 = params['mu2']; diff_t = params['diff_t']
+    mu1 = params['mu1']; mu2 = params['mu2']; diff_t = params['delta_t']
     c_AVP = params['c_AVP']; b_AVP = params['b_AVP']     
     
     partial_R_r = 1+(gamma_AVP+(((mu1*r)/(mu2+phi))*((2*r)+((c_AVP*phi)*
@@ -81,7 +80,7 @@ def d_phi_r(P_r_R_r,P_phi_R_r):
 def r_FHN(r_n, phi, **params):
     """Value of r in FHN element"""
     #set constants
-    a = 0; b = -0.6; diff_t = params['diff_t']
+    a = 0; b = -0.6; diff_t = params['delta_t']
     
     r = r_n +((phi + a)*diff_t)/(1 + b*diff_t)
     
@@ -94,7 +93,7 @@ def partial_derivative_phi_residual_r(phi, r, **params):
     
     #set constants
     gamma_AVP = params['gamma_AVP']; c_AVP = params['c_AVP']; b_AVP = params['b_AVP']
-    mu1 = params['mu1']; mu2 = params['mu2']; diff_t = params['diff_t']
+    mu1 = params['mu1']; mu2 = params['mu2']; diff_t = params['delta_t']
     
     partial_phi_R_r = (((gamma_AVP+((mu1*r)/(mu2+phi)))*
             (c_AVP*((2*phi)-b_AVP-1)))-( ((mu1*r) /
@@ -114,7 +113,7 @@ def partial_derivative_phi_R_phi_AVP(i, j, phi, r, nodes, dphi_r, n, **params):
     term3_b = 0
     k = min(nodes)
     #set constants
-    c_AVP = params['c_AVP']; diff_t = params['diff_t']; alpha_AVP = params['alpha_AVP']
+    c_AVP = params['c_AVP']; diff_t = params['delta_t']; alpha_AVP = params['alpha_AVP']
     nsqint = params['nsqint']; ngradint = params['ngradint']; nquadint = params['nquadint']
     ncubint = params['ncubint']
 
@@ -153,8 +152,8 @@ def partial_derivative_phi_R_phi_FHN(i,j,phi,r,nodes,n, **params):
     term3_b = 0
     k = min(nodes)
     #set constants
-    b_d_phi_f_phi_FHN = params['b_d_phi_f_phi_FHN']; diff_t = params['diff_t']; c_d_phi_f_phi_FHN = params['c_d_phi_f_phi_FHN']
-    nsqint = params['nsqint']; ngradint = params['ngradint']; nquadint = params['nquadint']
+    b_d_phi_f_phi_FHN = params['b_d_phi_f_phi_FHN']; diff_t = params['delta_t']; c_d_phi_f_phi_FHN = params['c_d_phi_f_phi_FHN']
+    alpha_d_phi_f_phi_FHN = params['alpha_d_phi_f_phi_FHN']; nsqint = params['nsqint']; ngradint = params['ngradint']; nquadint = params['nquadint']
     ncubint = params['ncubint']; alpha_fun_phi_FHN = params['alpha_fun_phi_FHN']
 
     ##partial derivative term 1
@@ -186,22 +185,16 @@ def partial_derivative_phi_R_phi_FHN(i,j,phi,r,nodes,n, **params):
 ##as well as the phi componenets of each element
 ##i and j has to be between 0 and 3 ONLY
 ##howevever, the matrix index for phi (element node matrix) MUST be j+k, m+k, etc.
-def residual_phi(i,phi,r,nodes,n, **params):
+def residual_phi(i, phi, r, nodes, n, **params):
     """Calculation of the residual function"""
     
     ##initial values
-    term1=0
-    term2=0
-    term3_x=0
-    term3_y=0
-    term4_a=0
-    term4_b=0
-    term4_c=0
-    term4_d=0
-    k=min(nodes)
+    term1=0; term2=0; term3_x=0; term3_y=0; term4_a=0; term4_b=0; term4_c=0; term4_d=0
+    k = min(nodes)
+    
     #set constants
     alpha_fun_phi_AVP = params['alpha_fun_phi_AVP']; c_AVP = params['c_AVP']
-    diff_t = params['diff_t']; nsqint = params['nsqint']; ngradint = params['ngradint']; nquadint = params['nquadint']
+    diff_t = params['delta_t']; nsqint = params['nsqint']; ngradint = params['ngradint']; nquadint = params['nquadint']
     ncubint = params['ncubint']; nfluxint = params['nfluxint']
     
     ##residual term 1
@@ -282,7 +275,7 @@ def residual_phi(i,phi,r,nodes,n, **params):
                 
         
 ##calculation of the residual function for FHN NODES
-def residual_phi_FHN(i,phi,r,nodes,n,**params):
+def residual_phi_FHN(i, phi, r, nodes, n, **params):
     '''Calculation of the residual function for FHN NODES.
     Takes into account individual shape functions of each element as well as the phi componenets of each element.
     
@@ -300,7 +293,7 @@ def residual_phi_FHN(i,phi,r,nodes,n,**params):
     k=min(nodes)
     #set constants
     alpha_fun_phi_FHN = params['alpha_fun_phi_FHN']; c_d_phi_f_phi_FHN = params['c_d_phi_f_phi_FHN']
-    diff_t = params['diff_t']; nint = params['nint']; nsqint = params['nsqint']; ngradint = params['ngradint']
+    diff_t = params['delta_t']; nint = params['nint']; nsqint = params['nsqint']; ngradint = params['ngradint']
     nquadint = params['nquadint']; ncubint = params['ncubint']; nfluxint = params['nfluxint']    
     
     ##residual term 1
