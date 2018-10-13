@@ -12,13 +12,6 @@ Created on Mon Sep 17 10:36:52 2018
 import numpy as np, scipy.io as sio
 from functions import global_to_element_21x21
 
-time_step = 100
-matrix_size = 21*21*4
-global_matrix_size = 22*22
-
-#phi is defined for each element according to its shape functions as
-#phi = phi_1 .* N_1 + phi_2 .* N_2 + phi_3 .* N_3 + phi_4 .* N_4
-
 def fill_params(time_step, matrix_size, global_matrix_size):
     '''Function to initialise cardiac action potential model based on finite element method outlined in Goktepe et al.
     
@@ -28,6 +21,9 @@ def fill_params(time_step, matrix_size, global_matrix_size):
         
     Returns:
         paramter dictionary with initial values and constants
+        
+    phi is defined for each element according to its shape functions as:
+        phi = phi_1 .* N_1 + phi_2 .* N_2 + phi_3 .* N_3 + phi_4 .* N_4
     '''
     params = {}
     
@@ -39,20 +35,22 @@ def fill_params(time_step, matrix_size, global_matrix_size):
     params['r'] = r 
     
     #per element level calculation
-    params['R_phi'] = np.ones((matrix_size,1))
+    params['R_phi'] = np.ones((matrix_size, 1))
+    params['R_phi_global'] = np.ones((global_matrix_size, 1)) #this acts as a dummy variable to start the while loop
     params['p_phi_R_phi'] = np.zeros((matrix_size,matrix_size))
     params['p_phi_R_phi_global'] = np.zeros((global_matrix_size,global_matrix_size))
     params['p_r_R_r'] = np.zeros((time_step,matrix_size))
-    params['phi_global_time'] = np.zeros((global_matrix_size,time_step))
+    
+    params['phi_global_time'] = np.zeros((global_matrix_size, time_step))
     
     #defined this way so it makes organising the matrices easier
     params['phi_step'] = np.zeros(time_step)
     params['dphi_r'] = np.zeros((1, global_matrix_size))
     
     # vector consists of 10 times steps
-    t = np.arange(0,0.01,0.001) #the third value is the desired delta t
+    t = np.arange(0, 0.01, 0.001) #the third value is the desired delta t
     params['delta_t'] = t[2]-t[1] 
-    time = t/(params['delta_t'] + 1) #where n = 1, 2, ..., 100
+    time = t/params['delta_t'] #where n = 1, 2, ..., 100
     time = time.astype(int) 
     params['time'] = time
     
@@ -81,7 +79,8 @@ def fill_params(time_step, matrix_size, global_matrix_size):
     params['b_r_FHN'] = -0.6
     params['tol'] = 1e-6 ##convergence tolerance
     params['R_r_step'] = np.zeros((matrix_size, 1)) 
-    
+    params['Tol'] = np.ones((global_matrix_size, 1))*params['tol']
+
     #shape functions
     nint_contents = sio.loadmat('nint.mat')
     params['nint'] = nint_contents['nint']
@@ -97,3 +96,11 @@ def fill_params(time_step, matrix_size, global_matrix_size):
     params['nfluxint'] = nfluxint_contents['nfluxint']
 
     return params
+#%%
+if __name__ == '__main__':
+    
+    time_step = 100
+    matrix_size = 21*21*4
+    global_matrix_size = 22*22
+    
+    params = fill_params(time_step, matrix_size, global_matrix_size)
