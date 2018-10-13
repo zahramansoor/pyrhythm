@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import element_calcs ##imports element_calcs functions
 import functions as f
 
-##define matrix size
+#define matrix size
 matrix_size = 21*21*4
 global_matrix_size = 22*22
 time_step = 100
@@ -20,7 +20,7 @@ time_step = 100
 #initialise
 params = f.initialise_params(time_step, matrix_size, global_matrix_size)
 
-##time loop
+#time loop
 for n in params['time']:
     R_phi_global = np.ones((global_matrix_size,1))
     ##this acts as a dummy variable to start the while loop
@@ -66,6 +66,7 @@ for n in params['time']:
            + str(n) + 'th time step.')
     if n!=9: ##set the guess for the next time step as the solution for the previous time step
         r[(n+1),:]=r[n,:]
+
 
 ##=========================================================================================================    
 ##visualises the phi_global values by converting the global nodal values
