@@ -9,7 +9,7 @@ Created on Mon Sep 17 10:36:52 2018
 ##This version treats only the element nodes in the FHN element as FHN nodes
 import numpy as np
 import matplotlib.pyplot as plt
-from element_calcs import element_calcs ##imports element_calcs functions
+import element_calcs ##imports element_calcs functions
 import functions as f
 
 ##define matrix size
