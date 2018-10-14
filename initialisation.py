@@ -8,6 +8,7 @@ Created on Mon Sep 17 10:36:52 2018
 """
 ##FEM computation of a square element of cardiac muscle tissue
 ##Initialisation file
+
 from __future__ import division
 import numpy as np, scipy.io as sio
 from functions import global_to_element_21x21
