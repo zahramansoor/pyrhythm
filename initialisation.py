@@ -35,18 +35,18 @@ def fill_params(time_step, matrix_size, global_matrix_size):
     params['r'] = r 
     
     #per element level calculation
-    params['R_phi'] = np.ones((matrix_size, 1))
-    params['R_phi_global'] = np.ones((global_matrix_size, 1)) #this acts as a dummy variable to start the while loop
-    params['p_phi_R_phi'] = np.zeros((matrix_size,matrix_size))
-    params['p_phi_R_phi_global'] = np.zeros((global_matrix_size,global_matrix_size))
+    params['R_phi'] = np.ones(matrix_size)
+    params['R_phi_global'] = np.ones(global_matrix_size) #this acts as a dummy variable to start the while loop
+    params['p_phi_R_phi'] = np.zeros((matrix_size, matrix_size))
+    params['p_phi_R_phi_global'] = np.zeros((global_matrix_size, global_matrix_size))
     params['p_r_R_r'] = np.zeros((time_step,matrix_size))
-    params['R_r_step'] = np.zeros((matrix_size, 1)) 
+    params['R_r_step'] = np.zeros(matrix_size) 
     
     params['phi_global_time'] = np.zeros((global_matrix_size, time_step))
     
     #defined this way so it makes organising the matrices easier
     params['phi_step'] = np.zeros(time_step)
-    params['dphi_r'] = np.zeros((1, global_matrix_size))
+    params['dphi_r'] = np.zeros(global_matrix_size)
     
     #put initial guess for phi (FHN is non zero)
     phi_global = np.zeros(global_matrix_size)

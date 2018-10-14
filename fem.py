@@ -16,7 +16,7 @@ from skimage.external import tifffile
 
 def run_rhythm(params, constants, verbose = False):
     
-    for n in constants['time']:
+    for n in constants['time'][1:]:
     
         #initalise/update things
         if n != 0:
