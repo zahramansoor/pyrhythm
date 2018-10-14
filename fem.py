@@ -77,7 +77,7 @@ def run_rhythm(params, constants, verbose = False):
             #Newton's iteration for phi
             phi_global = phi_global - np.matmul(np.linalg.inv(p_phi_R_phi_global), R_phi_global)
             
-            sys.stdout.write('\n\n     Maximum value of residual for n = {}: {}\n'.format(n, max(abs(R_phi_global))))
+            sys.stdout.write('\n\n     Maximum value of residual for n = {}: {}\n'.format(n, max(abs(R_phi_global)))); sys.stdout.flush()
     
             params['phi_global_time'][:, n] = phi_global #updates global phi matrix for time loop
         
@@ -86,8 +86,9 @@ def run_rhythm(params, constants, verbose = False):
     return params
 
 def viewer(constants, data_dict):
-    '''Function to take an array of phi values as particular time steps and output a tif file.
-    Tif file will have phi values accross the square tissue matrix for time steps (in z)
+    '''Function to take an array of phi values at particular time steps and output a tif file.
+    Tif file will have phi values accross the square tissue matrix for time steps 
+    In tif file, z --> time; x, y --> 2D borders of 'cell' in square tissue matrix
     
     Input:
         constants dict
