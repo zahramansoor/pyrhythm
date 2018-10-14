@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from element import element 
 from functions import global_to_element_21x21, r_FHN, residual_phi_FHN, partial_derivative_phi_R_phi_FHN, element_to_global_21x21
 from initialisation import fill_params, fill_constants
+from skimage.external import tifffile
 
 def run_rhythm(params, constants, verbose = False):
     
@@ -84,8 +85,27 @@ def run_rhythm(params, constants, verbose = False):
     
     return params
 
-#%%
+def viewer(constants, data_dict):
+    '''Function to take an array of phi values as particular time steps and output a tif file.
+    Tif file will have phi values accross the square tissue matrix for time steps (in z)
     
+    Input:
+        constants dict
+        data_dict = output of run_rhythm
+    '''
+    arr = np.zeros((len(constants['time']), 22,22)) #22x22 matrix which will be plotted as a heatmap
+    
+    #making the action potential array into a tif file
+    for t in range(len(constants['time'])):
+        phi_global_n = data_dict['phi_global_time'][:, t] 
+        k = 0
+        for i in np.arange(0, 483, 22):
+            arr[t, k, 0:21] = phi_global_n[i:(i + 21)]
+            k += 1
+    
+    tifffile.imsave('test.tif', arr.astype('float32'))
+    
+#%%   
 if __name__ == '__main__':
     
     #define matrix size
@@ -97,26 +117,8 @@ if __name__ == '__main__':
     params = fill_params(time_step, matrix_size, global_matrix_size)
     constants = fill_constants(time_step)
     
+    #run algorithm
     data_dict = run_rhythm(params, constants, verbose = False)
     
-#%%
-##=========================================================================================================    
-##visualises the phi_global values by converting the global nodal values
-##into a square matrix and generating a heat map
-time = 0 #enter value of n
-phi_global_n = data_dict['phi_global_time'][:, time] 
-arr = np.zeros((22,22)) #22x22 matrix which will be plotted as a heatmap
-k = 0
-for i in np.arange(0, 483, 22):
-    arr[k, 0:21] = phi_global_n[i:(i + 21)]
-    k += 1
-    
-plt.imshow(arr, cmap='plasma', interpolation='nearest') ##plots heat map
-plt.show() ##shows heat map              
-        
-                
-                                   
-
-            
-                                   
-              
+    #save out tif of output
+    viewer(constants, data_dict)
