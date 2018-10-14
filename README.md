@@ -3,3 +3,5 @@ Finite element algorithm to model action potential propagation in a square tissu
 Contact: zahra.dhanerawala@gmail.com.
 
 Published in NCUR Proceedings 2018.
+
+Current example output is 'test.tif'.
