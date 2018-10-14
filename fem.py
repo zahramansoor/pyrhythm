@@ -15,7 +15,16 @@ from initialisation import fill_params, fill_constants
 from skimage.external import tifffile
 
 def run_rhythm(params, constants, verbose = False):
-    
+    '''Runs the main finite element method algorithm for calculating potential values (in mV).
+    Biological parameters are setup for isotropic cardiac tissues.
+    Inputs:
+        params = data dictionary initialised by fill_params
+        constants = constants dictionary; constants defined by Goktepe et .al
+        
+    Returns:
+        data_dict = all computed & updated matrices
+    '''
+    #time loop
     for n in constants['time'][1:]:
     
         #initalise/update things
@@ -82,7 +91,7 @@ def run_rhythm(params, constants, verbose = False):
 def viewer(constants, data_dict):
     '''Function to take an array of phi values at particular time steps and output a tif file.
     Tif file will have phi values accross the square tissue matrix for time steps 
-    In tif file, z --> time; x, y --> 2D borders of 'cell' in square tissue matrix
+    In tif file, z --> time; x, y --> 2D borders of a 'cell' in square tissue matrix
     
     Input:
         constants dict

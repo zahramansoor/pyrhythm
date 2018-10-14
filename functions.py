@@ -8,6 +8,8 @@ Created on Sun Sep 23 16:08:04 2018
 
 import numpy as np
 
+#FIXME: clean up syntax in the script - functional but not clean
+
 ##global_to_element_21x21
 ##converts the elemental nodes to global nodes for the Newton's method
 ##for 21 x 21 grid

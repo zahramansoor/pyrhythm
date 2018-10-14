@@ -18,9 +18,8 @@ def element(nodes, n, params, constants):
         nodes = elemental nodes of the position in the matrix
         n = time step
         params = parameter dictionary
-    '''
-        
-    #set matrices from parameter dictionary
+    '''       
+    #set matrices from parameter dictionary - makes it easier to input into functions
     phi = params['phi']; r = params['r']; R_phi = params['R_phi']; p_phi_R_phi = params['p_phi_R_phi']
         
     k = min(nodes)
