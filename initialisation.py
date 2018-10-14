@@ -52,7 +52,10 @@ def fill_params(time_step, matrix_size, global_matrix_size):
     phi_global = np.zeros(global_matrix_size)
     phi_global[230] = 5.385e-1; phi_global[231] = 5.385e-1; phi_global[252] = 5.385e-1; phi_global[253] = 5.385e-1
     params['phi_global'] = phi_global
-
+    
+    #update phi_global_time initial values at t = 0
+    params['phi_global_time'][:, 0] = phi_global
+    
     #setting t=0
     phi[0, :] = global_to_element_21x21(phi[0, :],phi_global)
     params['phi'] = phi

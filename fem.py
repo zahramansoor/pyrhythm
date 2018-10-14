@@ -106,7 +106,7 @@ if __name__ == '__main__':
     #define matrix size
     matrix_size = 21*21*4
     global_matrix_size = 22*22
-    time_step = 100
+    time_step = 150
     
     #initialise
     params = fill_params(time_step, matrix_size, global_matrix_size)
