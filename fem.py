@@ -71,11 +71,11 @@ def run_rhythm(params, constants, verbose = False):
             #Newton's iteration for phi
             phi_global = phi_global - np.matmul(np.linalg.inv(params['p_phi_R_phi_global']), params['R_phi_global'])
             
-            sys.stdout.write('\n\n     Maximum value of residual for n = {}: {}\n'.format(n, max(abs(params['R_phi_global'])))); sys.stdout.flush()
+            sys.stdout.write('\n     Maximum value of residual for n = {}: {}'.format(n, max(abs(params['R_phi_global'])))); sys.stdout.flush()
     
             params['phi_global_time'][:, n] = phi_global #updates global phi matrix for time loop
         
-        sys.stdout.write('\n\nPassed tol for n = {}'.format(n)); sys.stdout.flush()
+        sys.stdout.write('\n\n\nPassed tol for n = {}'.format(n)); sys.stdout.flush()
     
     return params
 
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     constants = fill_constants(time_step)
     
     #run algorithm
-    data_dict = run_rhythm(params, constants, verbose = False)
+    data_dict = run_rhythm(params, constants)
     
     #save out tif of output
     viewer(constants, data_dict)
