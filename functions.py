@@ -10,6 +10,7 @@ import numpy as np
 
 #FIXME: clean up syntax in the script - functional but not clean
 
+#%%
 def global_to_element_21x21(element_matrix,global_matrix):
     '''
     Converts the elemental nodes to global nodes for the Newton's method
@@ -334,7 +335,7 @@ def element_to_global_21x21(R_phi, p_phi_R_phi):
     
     #assembling R_phi's
     R_phi_global[0] = R_phi[0] #standalone nodes
-    R_phi_global[21] = R_phi[82]
+    R_phi_global[21] = R_phi[81]
     R_phi_global[462] = R_phi[1683]
     R_phi_global[483] = R_phi[1762] 
     
@@ -361,14 +362,17 @@ def element_to_global_21x21(R_phi, p_phi_R_phi):
     #summing interior nodes
     k=23 #the global node start point
     m=2 #the local node start point
-    while k<461:
+    while k<61: #461
         if (k-21)%22==0: #right boundary
             k+=1
         elif k%22==0: #left boundary
             k+=1
+            print('boundary skip')
             m+=4
         else:
             R_phi_global[k]=R_phi[m]+R_phi[m+5]+R_phi[m+83]+R_phi[m+86] #interior nodes
+            print(k)
+            print(m)
             k+=1
             m+=4
             

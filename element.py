@@ -7,7 +7,7 @@ Created on Sat Oct 13 16:13:52 2018
 
 """
 import numpy as np
-from functions import residual_r, partial_derivative_r_residual_r, partial_derivative_r_residual_r, partial_derivative_phi_residual_r, d_phi_r, partial_derivative_phi_R_phi_AVP, residual_phi
+from functions import residual_r, partial_derivative_r_residual_r, partial_derivative_phi_residual_r, d_phi_r, partial_derivative_phi_R_phi_AVP, residual_phi
 
 def element(nodes, n, params, constants):
     '''
