@@ -5,7 +5,7 @@ matrices.
 
 ### Installation:
 
-`pip install numpy scikit-image`
+`pip install numpy scikit-image scipy`
 
 Contact: (zahra.dhanerawala@gmail.com).
 
