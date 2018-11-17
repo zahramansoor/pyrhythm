@@ -324,20 +324,17 @@ def residual_phi_FHN(i, phi, r, nodes, n, **params):
     
     return R_phi
 
-
-#computes the global matrix of the partial derivatives of the residuals
-##and the residuals for the elements
+#%%
 def element_to_global_21x21(R_phi, p_phi_R_phi):
     '''
     Computes the global matrix of the partial derivatives of the residuals and the residuals and the residuals for the elements.
-    '''
-    
+    '''   
     #initialise
     R_phi_global=np.zeros(484); p_phi_R_phi_global=np.zeros((484,484))
     
     #assembling R_phi's
     R_phi_global[0] = R_phi[0] #standalone nodes
-    R_phi_global[21] = R_phi[81];
+    R_phi_global[21] = R_phi[82]
     R_phi_global[462] = R_phi[1683]
     R_phi_global[483] = R_phi[1762] 
     
@@ -345,7 +342,7 @@ def element_to_global_21x21(R_phi, p_phi_R_phi):
     m=3 #the local node start point
     for k in np.arange(22,441,22):
         R_phi_global[k]=R_phi[m]+R_phi[m+81]
-        m+=84
+        m+=84 #striding by 84
     #summing right boundary nodes
     m=82 #the local node start point
     for k in np.arange(43,463,22):
