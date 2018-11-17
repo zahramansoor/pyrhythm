@@ -78,7 +78,7 @@ def run_rhythm(params, constants, verbose = False):
             params['R_phi_global'], params['p_phi_R_phi_global'] = element_to_global_21x21(params['R_phi'], params['p_phi_R_phi'])
             
             #Newton's iteration for phi
-            phi_global = phi_global - np.matmul(np.linalg.inv(params['p_phi_R_phi_global']), params['R_phi_global'])
+            phi_global = phi_global - np.matmul(np.linalg.inv(params['p_phi_R_phi_global']), abs(params['R_phi_global']))
             
             sys.stdout.write('\n     Maximum value of residual for n = {}: {}'.format(n, max(abs(params['R_phi_global'])))); sys.stdout.flush()
     
@@ -101,13 +101,13 @@ def viewer(constants, data_dict):
     
     #making the action potential array into a tif file
     for t in range(len(constants['time'])):
-        phi_global_n = data_dict['phi_global_time'][:, t] 
+        phi_global_n = abs(data_dict['phi_global_time'][:, t]) 
         k = 0
         for i in np.arange(0, 483, 22):
-            arr[t, k, 0:21] = phi_global_n[i:(i + 21)]
+            arr[t,k,0:21] = phi_global_n[i:(i+21)]
             k += 1
     
-    tifffile.imsave('test.tif', arr.astype('float32'))
+    tifffile.imsave('absrphi.tif', arr.astype('float32'))
     
 #%%   
 if __name__ == '__main__':

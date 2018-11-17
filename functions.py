@@ -449,7 +449,7 @@ def element_to_global_21x21(R_phi, p_phi_R_phi):
     while k<461:
         if k%22==0:
             k+=1
-            m+=1 #have to do this step otherwise it shifts the element one over
+            m+=1 #have to do this step otherwise it shifts the element one over 
         elif (k-21)%22==0:
             k+=1
             m+=1
