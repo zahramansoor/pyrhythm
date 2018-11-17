@@ -1,7 +1,11 @@
-### Finite element algorithm to model action potential propagation in a square tissue matrix via reaction diffusion equations. Written in Python 3+
+## Finite element algorithm to model action potential propagation in a square tissue matrix via reaction diffusion equations. Written in Python 3+
 
 Note that current functionality is only tested on 21 x 21 square tissue 
 matrices.
+
+### Installation:
+
+`pip install numpy scikit-image`
 
 Contact: (zahra.dhanerawala@gmail.com).
 
