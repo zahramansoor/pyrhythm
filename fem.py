@@ -39,8 +39,9 @@ def run_rhythm(params, constants, verbose = False):
         
         #re-initialise R_phi_global to start while loop
         params['R_phi_global'] = np.ones(global_matrix_size)
-        
-        while sum(abs(params['R_phi_global'])) > sum(Tol):
+
+        while sum(params['R_phi_global']) > sum(Tol): #assymetry test        
+#        while sum(abs(params['R_phi_global'])) > sum(Tol):
                     
             params['phi_step'][n] += 1
             
@@ -78,7 +79,7 @@ def run_rhythm(params, constants, verbose = False):
             params['R_phi_global'], params['p_phi_R_phi_global'] = element_to_global_21x21(params['R_phi'], params['p_phi_R_phi'])
             
             #Newton's iteration for phi
-            phi_global = phi_global - np.matmul(np.linalg.inv(params['p_phi_R_phi_global']), abs(params['R_phi_global']))
+            phi_global = phi_global - np.matmul(np.linalg.inv(params['p_phi_R_phi_global']), params['R_phi_global'])
             
             sys.stdout.write('\n     Maximum value of residual for n = {}: {}'.format(n, max(abs(params['R_phi_global'])))); sys.stdout.flush()
     
@@ -112,7 +113,7 @@ def viewer(constants, data_dict):
 #%%   
 if __name__ == '__main__':
     
-    #define matrix size
+    #define matrix size - algorithm is only adapted to 22 x 22 square matrices at this point
     matrix_size = 21*21*4
     global_matrix_size = 22*22
     time_step = 100
