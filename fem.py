@@ -107,7 +107,7 @@ def viewer(constants, data_dict):
             arr[t, k, 0:21] = phi_global_n[i:(i + 21)]
             k += 1
     
-    tifffile.imsave('test2.tif', arr.astype('float32'))
+    tifffile.imsave('test.tif', arr.astype('float32'))
     
 #%%   
 if __name__ == '__main__':
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     #define matrix size
     matrix_size = 21*21*4
     global_matrix_size = 22*22
-    time_step = 50
+    time_step = 100
     
     #initialise
     params = fill_params(time_step, matrix_size, global_matrix_size)

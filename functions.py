@@ -362,17 +362,14 @@ def element_to_global_21x21(R_phi, p_phi_R_phi):
     #summing interior nodes
     k=23 #the global node start point
     m=2 #the local node start point
-    while k<61: #461
+    while k<461:
         if (k-21)%22==0: #right boundary
             k+=1
         elif k%22==0: #left boundary
             k+=1
-            print('boundary skip')
             m+=4
         else:
             R_phi_global[k]=R_phi[m]+R_phi[m+5]+R_phi[m+83]+R_phi[m+86] #interior nodes
-            print(k)
-            print(m)
             k+=1
             m+=4
             
