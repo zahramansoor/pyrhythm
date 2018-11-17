@@ -11,4 +11,4 @@ Contact: (zahra.dhanerawala@gmail.com).
 
 Published in NCUR Proceedings 2018.
 
-Current example output is 'test.tif'.
+Example outputs located in 'demo_outputs'.
