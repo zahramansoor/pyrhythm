@@ -19,7 +19,8 @@ def global_to_element_21x21(element_matrix,global_matrix):
     element_matrix[0]=global_matrix[0] #first node
     j=1
     for i in np.arange(1,1762,4):
-        if (i + 3)%84 == 0 and i != 1761: #if the node is on the boundary element, skip two to get to the next global node (boundaries done sep.)
+        if (i + 3)%84 == 0 and i != 1761: #if the node is on the boundary element, skip two 
+                                            #to get to the next global node (boundaries done sep.)
             element_matrix[i] = global_matrix[j] 
             element_matrix[i + 1] = global_matrix[j + 22]
             element_matrix[i + 2] = global_matrix[j + 21]
