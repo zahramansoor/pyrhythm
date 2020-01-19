@@ -9,7 +9,7 @@ matrices.
 
 `pip install numpy scikit-image scipy`
 
-Contact: zahra.dhanerawala@gmail.com.
+Contact: zahra.mansoor.md@gmail.com.
 
 Published in NCUR Proceedings 2018.
 
